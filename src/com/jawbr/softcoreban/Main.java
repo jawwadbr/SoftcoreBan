@@ -1,9 +1,9 @@
-package com.softcoreban;
+package com.jawbr.softcoreban;
 
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.softcoreban.listeners.DeathListener;
+import com.jawbr.softcoreban.listeners.DeathListener;
 
 public class Main extends JavaPlugin {
 
@@ -15,6 +15,9 @@ public class Main extends JavaPlugin {
 		PluginManager pm = getServer().getPluginManager();
 		DeathListener listener = new DeathListener(this);
 		pm.registerEvents(listener, this);
+		
+		// Gen and load config file
+		saveDefaultConfig();
 		
 	}
 	
