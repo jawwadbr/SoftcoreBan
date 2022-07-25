@@ -12,14 +12,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-//import org.bukkit.event.player.PlayerLoginEvent;
 
 import com.softcoreban.Main;
 
 public class DeathListener implements Listener{
 	
 	private Main plugin = Main.getPlugin(Main.class);
-	//private PlayerLoginEvent.Result Result;
 	
 	public DeathListener(Main plugin) {
 		
@@ -35,7 +33,7 @@ public class DeathListener implements Listener{
 		return System.currentTimeMillis();
 	}
 	
-	public String getBanReadbleTime(Date date) {
+	public String getBanReadableTime(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
 		Date result = date;
 		String strDate = sdf.format(result);
@@ -99,6 +97,7 @@ public class DeathListener implements Listener{
 			return date;
 		}
 		case "friday": {
+			date = date + 604800000; // 7 days
 			return date;
 		}
 		case "saturday": {
@@ -151,30 +150,13 @@ public class DeathListener implements Listener{
 		
 		Player player = event.getEntity();
 		
-		//long currentDate = System.currentTimeMillis();
 		long date = getUnbanTime();
 		Date result = new Date(date);
 		
 		plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "ban " + player.getName() + " [SoftcoreBan]");
-		Bukkit.broadcastMessage(player.getDisplayName()+" Softcore banned and will be unbanned on " + getBanReadbleTime(result));
+		Bukkit.broadcastMessage(player.getDisplayName()+" Softcore banned and will be unbanned on " + getBanReadableTime(result));
 		
 		setExpiration(player);
 	}
-	
-//	//On player login
-//	@SuppressWarnings("static-access")
-//	@EventHandler
-//	public void onJoin(PlayerLoginEvent event) {
-//		
-//		if(event.getResult() == Result.KICK_BANNED) {
-//			Player player = event.getPlayer();
-//			if(Bukkit.getBanList(BanList.Type.NAME).isBanned(player.getName()) == true) {
-//				Date expiration = getExpiration(player);
-//				if(expiration == null) {
-//					player.kickPlayer(null);
-//				}
-//			}
-//		}
-//	}
 	
 }

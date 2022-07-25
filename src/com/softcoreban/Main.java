@@ -3,7 +3,6 @@ package com.softcoreban;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-//import com.softcoreban.calendar.DetectDate;
 import com.softcoreban.listeners.DeathListener;
 
 public class Main extends JavaPlugin {
@@ -17,8 +16,6 @@ public class Main extends JavaPlugin {
 		DeathListener listener = new DeathListener(this);
 		pm.registerEvents(listener, this);
 		
-		//DetectDate listenerDD = new DetectDate(this);
-		//pm.registerEvents(listenerDD, this);
 	}
 	
 	@Override
