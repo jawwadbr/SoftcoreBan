@@ -2,6 +2,6 @@ name: SoftcoreBan
 description: Temporarily ban players when they die and unban them on a specific time
 author: JawwadBR
 main: com.jawbr.softcoreban.Main
-version: 1.2.1
+version: 1.2.2
 api-version: 1.19
 commands:
