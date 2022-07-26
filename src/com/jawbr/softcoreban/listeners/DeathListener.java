@@ -164,7 +164,7 @@ public class DeathListener implements Listener{
 					
 					setExpiration(player);
 				}
-			}, 20);
+			}, 1);
 			
 		}
 	}
