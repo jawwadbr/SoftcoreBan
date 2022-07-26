@@ -5,3 +5,9 @@ limitBanDays: 2
 # Set what time of day players will be unbanned using minutes - DEFAULT: 360 minutes = 6 hours
 # With DEFAULT players will be unbanned at 6 AM
 unbanHour: 360
+
+# Set date format of your liking
+# If you don't know what types of format is available go to SimpleDateFormat Java Doc
+# https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+# DEFAULT: d-MM-yyyy HH:mm:ss
+date-format: d-MM-yyyy HH:mm:ss
