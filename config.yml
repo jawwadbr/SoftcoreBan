@@ -1,10 +1,46 @@
-# Set how many days do you want players to be banned for - DEFAULT: 2
-# NOTE: Players will always be unbanned in weekends and cannot be banned during.
+###############################
+#### NORMAL BANNING METHOD ####
+###############################
+
+# Set how many days do you want players to be banned for.
+# DEFAULT: 2
 limitBanDays: 2
 
-# Set what time of day players will be unbanned using minutes - DEFAULT: 360 minutes = 6 hours
+# Set what time of day players will be unbanned using minutes - 
 # With DEFAULT players will be unbanned at 6 AM
+# DEFAULT: 360 minutes = 6 hours
 unbanHour: 360
+
+# Allow for players that dies in weekend be banned or not. If set true, when it's friday, saturday or sunday the players can be banned when they die.
+# DEFAULT: false
+weekend-ban: false
+
+
+###############################
+#### LEGACY BANNING METHOD ####
+###############################
+
+# Before 1.2 the plugin only unban player at the next friday at a specific time of the day.
+# If you want for the plugin to work as it was like before set it to true.
+# DEFAULT: false
+legacy-mode: false
+
+# Set what time of day players will be unbanned using minutes - 
+# With DEFAULT players will be unbanned at 6 AM
+# DEFAULT: 360 minutes = 6 hours
+legacy-unbanHour: 360
+
+
+###############################
+######## MISCELLANEOUS ########
+###############################
+
+# Miscellaneous works with normal and legacy banning method
+
+# Allow a fixed hour of day for players to be unbanned. If set true, players will always be unbanned in the hour defined in 'unbanHour'.
+# If false, player will be unbanned in the same hour of the day he was banned.
+# DEFAULT: true
+global-unbanHour: true
 
 # Set date format of your liking
 # If you don't know what types of format is available go to SimpleDateFormat Java Doc
