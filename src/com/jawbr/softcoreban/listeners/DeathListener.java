@@ -41,31 +41,27 @@ public class DeathListener implements Listener{
 	
 	public String getBanReadableTime(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat(configFile.getString("date-format"));
-		Date result = date;
-		String strDate = sdf.format(result);
+		String strDate = sdf.format(date);
 		return strDate;
 	}
 	
 	public String getBanHour() {
-		long date = getCurrentDate();
 		SimpleDateFormat sdf = new SimpleDateFormat("HH");
-		Date result = new Date(date);
+		Date result = new Date(getCurrentDate());
 		String strDate = sdf.format(result);
 		return strDate;
 	}
 	
 	public String getBanMinutes() {
-		long date = getCurrentDate();
 		SimpleDateFormat sdf = new SimpleDateFormat("mm");
-		Date result = new Date(date);
+		Date result = new Date(getCurrentDate());
 		String strDate = sdf.format(result);
 		return strDate;
 	}
 	
 	public String getBanSeconds() {
-		long date = getCurrentDate();
 		SimpleDateFormat sdf = new SimpleDateFormat("ss");
-		Date result = new Date(date);
+		Date result = new Date(getCurrentDate());
 		String strDate = sdf.format(result);
 		return strDate;
 	}
@@ -75,26 +71,52 @@ public class DeathListener implements Listener{
 		int minutes = Integer.parseInt(getBanMinutes());
 		int seconds = Integer.parseInt(getBanSeconds());
 		
-		/*
-		 * Get the unban hour in minutes and convert it to millis. 
-		 * For some reason converting minutes direct to millis makes some discrepancy on the value
-		 * So because of that first converting everything to seconds and then millis
-		 */
-		long finalSecondsToMillis = (((hour*3600)+(minutes*60)+seconds)*1000);
+		boolean globalUnban = configFile.getBoolean("global-unbanHour");
 		
-		int cfgUnbanHour = (configFile.getInt("unbanHour")*60)*1000;
+		if(globalUnban) {
+			/*
+			 * Get the unban hour in minutes and convert it to millis. 
+			 * For some reason converting minutes direct to millis makes some discrepancy on the value
+			 * So because of that first converting everything to seconds and then millis
+			 */
+			long finalSecondsToMillis = (((hour*3600)+(minutes*60)+seconds)*1000);
+			
+			// Check if is legacy or not. And then get the right unbanHour config
+			int cfgUnbanHour;
+			if(configFile.getBoolean("legacy-mode")) {
+				cfgUnbanHour = (configFile.getInt("legacy-unbanHour")*60)*1000;
+			} else
+				cfgUnbanHour = (configFile.getInt("unbanHour")*60)*1000;
+			
+			return (getCurrentDate()-finalSecondsToMillis)+cfgUnbanHour;
+		}
 		
-		return (getCurrentDate()-finalSecondsToMillis)+cfgUnbanHour;
+			return getCurrentDate();
 	}
 	
 	public long getUnbanTime() {
 		
 		long date = getBanFinalHour();
 		
-		int limitBanDays = configFile.getInt("limitBanDays");
-		
 		int currentWeek = dayOfweek;
 		int daysUntilTarget = 0;
+		
+		if(configFile.getBoolean("legacy-mode")) {
+			// Do LEGACY BANNING METHOD
+			while(currentWeek != 5) {
+				if(currentWeek >=7) 
+					currentWeek = 0;
+				currentWeek++;
+				daysUntilTarget++;
+			}
+			if(daysUntilTarget == 0)
+				daysUntilTarget = 7;
+			
+			return date + (daysUntilTarget*86400000);
+		}
+		
+		// If Not Legacy
+		int limitBanDays = configFile.getInt("limitBanDays");
 		
 		while(currentWeek != 5) {
 			if(currentWeek >= 7)
@@ -146,9 +168,9 @@ public class DeathListener implements Listener{
 		
 		Player player = event.getEntity();
 		
-		// If is weekend player won't be banned
+		// If is weekend and in the config file weekend-ban it's false player won't be banned. This do not have in LEGACY METHOD
 		dayOfweek = LocalDate.now().getDayOfWeek().getValue();
-		if(dayOfweek >= 5) { 
+		if(!configFile.contains("legacy-mode") && !configFile.getBoolean("weekend-ban") && dayOfweek >= 5) { 
 			BroadcastMsg.consoleMessage("[SoftcoreBan] Today is "+ Capitalize.capitalize(getDateOfWeek()) + ". " + player.getName() + " will not be banned.");
 		} else {
 			
