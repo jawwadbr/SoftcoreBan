@@ -1,8 +1,8 @@
 package com.jawbr.softcoreban;
 
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.jawbr.softcoreban.commands.Author;
 import com.jawbr.softcoreban.listeners.DeathListener;
 
 public class Main extends JavaPlugin {
@@ -12,9 +12,10 @@ public class Main extends JavaPlugin {
 		getLogger().info("SoftcoreBan plugin has been enabled");
 		
 		// Register death event
-		PluginManager pm = getServer().getPluginManager();
-		DeathListener listener = new DeathListener(this);
-		pm.registerEvents(listener, this);
+		getServer().getPluginManager().registerEvents(new DeathListener(), this);
+		
+		// Register Commands
+		getCommand("softcore-author").setExecutor(new Author());
 		
 		// Gen and load config file
 		saveDefaultConfig();
