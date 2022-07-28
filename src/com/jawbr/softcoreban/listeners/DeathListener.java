@@ -25,10 +25,6 @@ public class DeathListener implements Listener{
 	private FileConfiguration configFile = plugin.getConfig();
 	private int dayOfweek;
 	
-	public DeathListener(Main plugin) {
-		
-	}
-	
 	///////////////////////
 	
 	public String getDateOfWeek() {
@@ -103,6 +99,7 @@ public class DeathListener implements Listener{
 		
 		if(configFile.getBoolean("legacy-mode")) {
 			// Do LEGACY BANNING METHOD
+			plugin.getLogger().info("Legacy Mode is activated!");
 			while(currentWeek != 5) {
 				if(currentWeek >=7) 
 					currentWeek = 0;
@@ -115,9 +112,15 @@ public class DeathListener implements Listener{
 			return date + (daysUntilTarget*86400000);
 		}
 		
-		// If Not Legacy
 		int limitBanDays = configFile.getInt("limitBanDays");
 		
+		if(configFile.getBoolean("remove-dayOfweek-max")) {
+			// If true, when a player is banned on thursday, with limitBanDays 2, he will be unbanned on saturday and not friday.
+				
+			return date + (limitBanDays*86400000);
+		}
+		
+		// If Not Legacy
 		while(currentWeek != 5) {
 			if(currentWeek >= 7)
 				currentWeek = 0;
@@ -146,10 +149,7 @@ public class DeathListener implements Listener{
 		return BanExpiration;
 	}
 	
-	public void setExpiration(Player player) {
-		long initialDate = getUnbanTime();
-		Date date = new Date(initialDate);
-		
+	public void setExpiration(Player player, Date date) {
 		BanList banList = Bukkit.getBanList(Type.NAME);
 		for (BanEntry entry : banList.getBanEntries()) {
 			String name = entry.getTarget();
@@ -184,7 +184,7 @@ public class DeathListener implements Listener{
 					plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "ban " + player.getName() + " [SoftcoreBan] "+DeathBanMsgCustom.getBanDeathReason(player, event));
 					BroadcastMsg.broadcastMessage("[SoftcoreBan] "+event.getDeathMessage()+". Ban will be removed on " + getBanReadableTime(result));
 					
-					setExpiration(player);
+					setExpiration(player, result);
 				}
 			}, 1);
 			
